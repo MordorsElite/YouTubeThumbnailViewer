@@ -5,16 +5,22 @@ function wait(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// Add a flag to track if the thumbnail and title have already been added
-let thumbnailAdded = false;
+// Variable to store the last processed video ID
+let lastVideoId = null;
 
 // Function to insert the thumbnail container
 async function addThumbnailContainer() {
-    // Check if the thumbnail container has already been added
-    if (thumbnailAdded) {
-        console.log('%c[YTthumbnail] %cThumbnail already added, skipping...', 'color: red;', 'color: yellow');
+    // Get the video ID from the URL
+    const videoId = new URLSearchParams(window.location.search).get("v");
+
+    // If the video ID hasn't changed, skip adding the thumbnail
+    if (videoId === lastVideoId) {
+        console.log('%c[YTthumbnail] %cSame video detected, skipping...', 'color: red;', 'color: yellow');
         return;
     }
+
+    // Update the last processed video ID
+    lastVideoId = videoId;
 
     // Wait for the #secondary div to appear in the DOM
     let secondaryDiv = null;
@@ -29,14 +35,11 @@ async function addThumbnailContainer() {
         await wait(500); // Check every 500ms
     }
 
-    // Check if the thumbnail container has already been added
-    if (thumbnailAdded) {
-        console.log('%c[YTthumbnail] %cThumbnail already added, skipping...', 'color: red;', 'color: yellow');
-        return;
+    // Remove any existing thumbnail container to prevent duplicates
+    const existingContainer = document.querySelector("#thumbnail-extension-container");
+    if (existingContainer) {
+        existingContainer.remove();
     }
-
-    // Set the flag to true to prevent multiple additions
-    thumbnailAdded = true;
 
     // Once #secondary is found, wait a bit longer to ensure full load
     console.log('%c[YTthumbnail] %cSecondary div found, waiting to ensure full page load...', 'color: red;', 'color: green');
@@ -48,7 +51,6 @@ async function addThumbnailContainer() {
     extensionContainer.id = "thumbnail-extension-container";
 
     // Fetch the thumbnail URL
-    const videoId = new URLSearchParams(window.location.search).get("v");
     let thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
     try {
         const response = await fetch(thumbnailUrl);
@@ -84,9 +86,7 @@ async function addThumbnailContainer() {
 
 // Start observing DOM changes to detect YouTube's dynamic loading
 const observer = new MutationObserver(() => {
-    if (!thumbnailAdded) {
-        addThumbnailContainer();
-    }
+    addThumbnailContainer();
 });
 
 // Start observing the body for changes
