@@ -1,0 +1,19 @@
+{
+    "manifest_version": 3,
+    "name": "YouTube Thumbnail Viewer",
+    "version": "1.0",
+    "description": "Displays the thumbnail and title of the current YouTube video beside the video player.",
+    "permissions": ["activeTab", "scripting"],
+    "host_permissions": ["https://www.youtube.com/*", "https://youtu.be/*"],
+    "content_scripts": [
+      {
+        "matches": ["https://www.youtube.com/watch*", "https://youtu.be/*"],
+        "js": ["content.js"],
+        "css": ["styles.css"]
+      }
+    ],
+    "icons": {
+      "48": "icons/icon-48.png"
+    }
+  }
+  
