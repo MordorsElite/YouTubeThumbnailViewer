@@ -1,6 +1,6 @@
 # YouTube Thumbnail Viewer
 
-This extension allows you to see the thumbnail and thumnail of the video you are currently watching on the right sidebar above the recommended videos.
+This extension allows you to see the thumbnail and title of the video you are currently watching on the right sidebar above the recommended videos.
 
 ## Installation
 
