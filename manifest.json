@@ -8,8 +8,8 @@
     "content_scripts": [
       {
         "matches": ["https://www.youtube.com/watch*", "https://youtu.be/*"],
-        "js": ["content.js"],
-        "css": ["styles.css"]
+        "js": ["src/content.js"],
+        "css": ["styles/styles.css"]
       }
     ],
     "icons": {
